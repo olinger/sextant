@@ -1,10 +1,10 @@
 from math import cos,sin,acos,asin,tan
 from math import degrees as deg, radians as rad
-from datetime import date,datetime,time
+from datetime import date,datetime,time,timedelta
 import time as tm
 import requests
 from PIL import Image
-from StringIO import StringIO
+from io import StringIO,BytesIO
 import os, sys
 
 # this module is not provided here. See text.
@@ -126,14 +126,33 @@ class sun:
 
 if __name__ == "__main__":
   s=sun(lat=42.727848,long=-73.690065)
-  print(datetime.today())
-  print(s.sunrise(),s.solarnoon(),s.sunset())
+  today = datetime.today().date()
+  print("Todays Date ", datetime.today().date())
+  sunrise = s.sunrise()
+  #d = datetime(2014, 9, 18, 12, 55, 0)
+  pictoday = False
+  print(d)
+  while(True):
+    if (today != datetime.today().date()):
+      sunrise = s.sunrise
+      today = datetime.today().date()
+      print(datetime.today().date())
+      print(s.sunrise(),s.solarnoon(),s.sunset())
+      pictoday=False
 
-  directory = os.getcwd() + "/sunrises/"
-  if not os.path.exists(directory):
-    os.makedirs(directory)
+    diff = s.sunrise - datetime.now();
+    if (diff.total_seconds() < 30 and diff.total_seconds() > 0) and not pictoday:
+      print("Taking Pic")
+      directory = os.getcwd() + "/sunrises/"
+      if not os.path.exists(directory):
+        os.makedirs(directory)
 
-  r = requests.get('http://10.14.93.11/image.jpg', auth=('admin', ''))
-  i = Image.open(StringIO(r.content))
-  img_name = directory + str(datetime.today()) + ".jpg"
-  i.save(img_name)
+      r = requests.get('http://192.168.0.24/image.jpg', auth=('admin', ''))
+      i = Image.open(BytesIO(r.content))
+      img_name = directory + str(datetime.today().date()) + ".jpg"
+      i.save(img_name)
+      pictoday = True
+
+
+
+   
