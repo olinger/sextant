@@ -125,7 +125,7 @@ class sun:
   self.sunset_t   =self.solarnoon_t+hourangle*4/1440
 
 if __name__ == "__main__":
-  s=sun(lat=52.37,long=4.90)
+  s=sun(lat=42.727848,long=-73.690065)
   print(datetime.today())
   print(s.sunrise(),s.solarnoon(),s.sunset())
 
