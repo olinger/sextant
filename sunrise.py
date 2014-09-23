@@ -10,7 +10,7 @@ import os, sys
 # this module is not provided here. See text.
 #from timezone import LocalTimezone
 
-dst = tm.localtime().tm_isdst;
+dst = tm.localtime().tm_isdst
 
 class sun:
  """ 
@@ -128,19 +128,19 @@ if __name__ == "__main__":
   s=sun(lat=42.727848,long=-73.690065)
   today = datetime.today().date()
   print("Todays Date ", datetime.today().date())
-  sunrise = s.sunrise()
+  sunrise = datetime.combine(datetime.now().date(),s.sunrise())
   #d = datetime(2014, 9, 18, 12, 55, 0)
   pictoday = False
-  print(d)
   while(True):
     if (today != datetime.today().date()):
-      sunrise = s.sunrise
+      sunrise =  datetime.combine(datetime.now().date(),s.sunrise())
       today = datetime.today().date()
       print(datetime.today().date())
       print(s.sunrise(),s.solarnoon(),s.sunset())
       pictoday=False
 
-    diff = s.sunrise - datetime.now();
+    
+    diff = (sunrise - datetime.now())
     if (diff.total_seconds() < 30 and diff.total_seconds() > 0) and not pictoday:
       print("Taking Pic")
       directory = os.getcwd() + "/sunrises/"
