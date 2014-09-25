@@ -139,11 +139,11 @@ if __name__ == "__main__":
       print(s.sunrise(),s.solarnoon(),s.sunset())
       pictoday=False
 
-    
+    dropbox_dir = sys.argv[1]
     diff = (sunrise - datetime.now())
     if (diff.total_seconds() < 30 and diff.total_seconds() > 0) and not pictoday:
       print("Taking Pic")
-      directory = os.getcwd() + "/sunrises/"
+      directory = dropbox_dir + "/sunrises/"
       if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -153,6 +153,5 @@ if __name__ == "__main__":
       i.save(img_name)
       pictoday = True
 
-
-
    
+
