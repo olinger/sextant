@@ -6,6 +6,7 @@ import requests
 from PIL import Image
 from io import StringIO,BytesIO
 import os, sys
+import dropbox
 
 # this module is not provided here. See text.
 #from timezone import LocalTimezone
@@ -129,7 +130,25 @@ if __name__ == "__main__":
   today = datetime.today().date()
   print("Todays Date ", datetime.today().date())
   sunrise = datetime.combine(datetime.now().date(),s.sunrise())
-  #d = datetime(2014, 9, 18, 12, 55, 0)
+  #app_key = 'udsf5822xjf2v1i'
+  #app_secret = 'a1kzkgjahfdtam5'
+
+  #flow = dropbox.client.DropboxOAuth2FlowNoRedirect(app_key, app_secret)
+  #authorize_url = flow.start()
+
+  #authorize_url = flow.start()
+  #print('1. Go to: ' + authorize_url)
+  #print('2. Click "Allow" (you might have to log in first)')
+  #print('3. Copy the authorization code.')
+  #code = input("Enter the authorization code here: ").strip()
+
+  #access_token, user_id = flow.finish(code)
+  access_token = '-9olRAaCcOMAAAAAAAAAB1ZdoY9bBGj3vU87cXyIsrZrXGfW5PuBqOt1j-HMKO4f'
+  client = dropbox.client.DropboxClient(access_token)
+  #print('access token ', access_token)
+  print('linked account: ', client.account_info())
+
+  d = datetime(2014, 9, 26, 15, 28, 0)
   pictoday = False
   while(True):
     if (today != datetime.today().date()):
@@ -139,11 +158,11 @@ if __name__ == "__main__":
       print(s.sunrise(),s.solarnoon(),s.sunset())
       pictoday=False
 
-    dropbox_dir = sys.argv[1]
-    diff = (sunrise - datetime.now())
+    diff = (sunrise - datetime.now() + timedelta(minutes=20))
+    #diff = (d - datetime.now())
     if (diff.total_seconds() < 30 and diff.total_seconds() > 0) and not pictoday:
       print("Taking Pic")
-      directory = dropbox_dir + "/sunrises/"
+      directory = "/sunrises/"
       if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -151,6 +170,10 @@ if __name__ == "__main__":
       i = Image.open(BytesIO(r.content))
       img_name = directory + str(datetime.today().date()) + ".jpg"
       i.save(img_name)
+
+      f = open(img_name, 'rb')
+      response = client.put_file(img_name, f)
+
       pictoday = True
 
    
