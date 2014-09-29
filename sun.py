@@ -1,17 +1,9 @@
+from datetime import date,datetime,time,timedelta
 from math import cos,sin,acos,asin,tan
 from math import degrees as deg, radians as rad
-from datetime import date,datetime,time,timedelta
 import time as tm
-import requests
-from PIL import Image
-from io import StringIO,BytesIO
-import os, sys
-import dropbox
 
-# this module is not provided here. See text.
-#from timezone import LocalTimezone
-
-
+dst = tm.localtime().tm_isdst
 
 class sun:
  """ 
@@ -29,14 +21,15 @@ class sun:
   self.lat=lat
   self.long=long
   
-  print ("NOW IS: " , datetime.now())
  def sunrise(self,when=datetime.now()):
+
   """
   return the time of sunrise as a datetime.time object
   when is a datetime.datetime object. If none is given
   a local time zone is assumed (including daylight saving
   if present)
   """
+
   if when is None : when = datetime.now()
   self.__preptime(when)
   self.__calc()
@@ -124,57 +117,3 @@ class sun:
   self.solarnoon_t=(720-4*longitude-eqtime+timezone*60)/1440
   self.sunrise_t  =self.solarnoon_t-hourangle*4/1440
   self.sunset_t   =self.solarnoon_t+hourangle*4/1440
-
-if __name__ == "__main__":
-  s=sun(lat=42.727848,long=-73.690065)
-  today = datetime.today().date()
-  print("Todays Date ", datetime.today().date())
-  sunrise = datetime.combine(datetime.now().date(),s.sunrise())
-  #app_key = 'udsf5822xjf2v1i'
-  #app_secret = 'a1kzkgjahfdtam5'
-
-  #flow = dropbox.client.DropboxOAuth2FlowNoRedirect(app_key, app_secret)
-  #authorize_url = flow.start()
-
-  #authorize_url = flow.start()
-  #print('1. Go to: ' + authorize_url)
-  #print('2. Click "Allow" (you might have to log in first)')
-  #print('3. Copy the authorization code.')
-  #code = input("Enter the authorization code here: ").strip()
-
-  #access_token, user_id = flow.finish(code)
-  access_token = '-9olRAaCcOMAAAAAAAAAB1ZdoY9bBGj3vU87cXyIsrZrXGfW5PuBqOt1j-HMKO4f'
-  client = dropbox.client.DropboxClient(access_token)
-  #print('access token ', access_token)
-  print('linked account: ', client.account_info())
-
-  d = datetime(2014, 9, 26, 15, 28, 0)
-  pictoday = False
-  while(True):
-    if (today != datetime.today().date()):
-      sunrise =  datetime.combine(datetime.now().date(),s.sunrise())
-      today = datetime.today().date()
-      print(datetime.today().date())
-      print(s.sunrise(),s.solarnoon(),s.sunset())
-      pictoday=False
-
-    diff = (sunrise - datetime.now() + timedelta(minutes=30))
-    #diff = (d - datetime.now())
-    if (diff.total_seconds() < 30 and diff.total_seconds() > 0) and not pictoday:
-      print("Taking Pic")
-      directory = "/sunrises/"
-      if not os.path.exists(directory):
-        os.makedirs(directory)
-
-      r = requests.get('http://192.168.0.24/image.jpg', auth=('admin', ''))
-      i = Image.open(BytesIO(r.content))
-      img_name = directory + str(datetime.now()) + ".jpg"
-      i.save(img_name)
-
-      f = open(img_name, 'rb')
-      response = client.put_file(img_name, f)
-
-      pictoday = True
-
-   
-
