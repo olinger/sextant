@@ -26,7 +26,7 @@ while(True):
 		today = datetime.today().date()
 		print(datetime.today().date())
 		print(s.sunrise(),s.solarnoon(),s.sunset())
-		times = [sunrise,sunrise+timedelta(minutes=20),sunrise+timedelta(minutes=25),sunrise+timedelta(minutes=30),sunrise+timedelta(minutes=35),sunrise+timedelta(minutes=40),sunrise+timedelta(minutes=45),sunrise+timedelta(minutes=50)]
+		times = [sunrise,sunrise+timedelta(minutes=180),sunrise+timedelta(minutes=60),sunrise+timedelta(minutes=80),sunrise+timedelta(minutes=100),sunrise+timedelta(minutes=120),sunrise+timedelta(minutes=140),sunrise+timedelta(minutes=160)]
 		for time in times:
 			print("Time ", str(time))
 	index = 0
